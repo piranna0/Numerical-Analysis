@@ -3,14 +3,18 @@
 % to the set of all vectors that satisfy norm(x,2)<=1
 
 % Ten examples...
-for eg=1:10
+%for eg=1:10
    % Generate a random 2x2..
    A = randn(2,2);
  % Display the set S of all vectors x for which norm(x,2)<=1
    subplot(1,2,1)
-   theta = linspace(0,2*pi,200);
-   c = cos(theta);
-   s = sin(theta);
+   theta = linspace(0,pi/2,200);
+   tempC = cos(theta).^2;
+   tempCrev = tempC(end:-1:1);
+   tempS = sin(theta).^2;
+   tempSrev = tempS(end:-1:1);
+   c = [tempC -tempCrev -tempC tempCrev];
+   s = [tempS tempSrev -tempS -tempSrev];
    fill(c,s,'y','linewidth',2)
    hold on
    plot([-1.2 1.2],[0 0],':k',[0 0],[-1.2,1.2],':k')
@@ -36,4 +40,4 @@ for eg=1:10
    xlabel(sprintf('A = [%5.2f  %5.2f ; %4.2f  %5.2f]',A(1,1), A(1,2), A(2,1), A(2,2)),'fontsize',14)
    shg
    pause(1)
-end
+%end
