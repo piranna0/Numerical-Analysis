@@ -18,25 +18,25 @@ fprintf('Error = %10.3e\n\n\n',norm(M\y - ChebyInterp(x, y)));
 
 function B = B_i(x, i, j, M)
 n = length(x);
-x2 = -1 + 2 * ((x(j) - x(1)) / (x(n)-x(1)));
+x2 = -1 + 2 * ((x(i) - x(1)) / (x(n)-x(1)));
 B = T_k(x2, i, j, M);
 
 function T = T_k(x, i, j, M)
-if i == 1
+if j == 1
     T = 1;
-elseif i == 2
+elseif j == 2
     T = x;
 else
-    T = 2 * x * M(i-1, j) - M(i-2, j);
+    T = 2 * x * M(i, j-1) - M(i, j-2);
 end
 
 
 %Helper function for creating M matrix
-function B_j = B(x, i, M)
-if i== 1
-    B_j = ones(1, length(x));
-elseif i == 2
-    B_j = x';
+function B_j = B(x, j, M)
+if j== 1
+    B_j = ones(length(x), 1);
+elseif j == 2
+    B_j = x;
 else
-    B_j = (2 * (x') .* M(i-1, :) - M(i-2, :));
+    B_j = (2 * (x) .* M(:,j-1) - M(:,j-2));
 end

@@ -20,8 +20,10 @@ for j = 1:n
         M(:,j) = (2 * (xCheb) .* M(:,j-1) - M(:,j-2));
     end
 end
-
+M
 %lu decomposition
 [L, U] = lu(M);
 b = L \ y;
 alfa = U \ b;
+
+
