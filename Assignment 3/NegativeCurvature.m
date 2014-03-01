@@ -12,9 +12,9 @@ else
 % x'Ax <=0
 % A = P'LDL'P
 % Since A and D congruent we want:
-% x'Ax = x'P'LDL'Px = w'Dw < 0 and w = L'Px
+% x'Ax = x'P'LDL'Px = w'Dw <= 0 and w = L'Px
 
-% We know that D(k,k) <= 0 (is this good enough? not D(k,k)<0)
+% We know that D(k,k) <= 0
 % To get D(k,k) use I(:, k)' * D * I(:, k)
 % Then x = P' * L \ w = P' * (L \ I(:, k))
     I = speye(n,n);
