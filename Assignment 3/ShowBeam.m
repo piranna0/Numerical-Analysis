@@ -1,7 +1,7 @@
   function ShowBeam()
  % Checks out the implementations of Beam1 and Beam2
  n = 1000;
- d1 = beam1(n);
+ d1 = Beam1(n);
  [d2,condA] = Beam2(n);
  err = norm(d1-d2)/norm(d1);
  close all

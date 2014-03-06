@@ -1,6 +1,8 @@
 function [d, condA] = Beam2(n)
+% Takes in a integer n and returns the downward displacement of the 
+% beam at x = k/n for k = 1:n using cholesky factorization
 
-% Will not work for n = 2 case, but that does not seem to be 
+% Will not work for n < 3 case, but that does not seem to be 
 % defined for this problem
 
 %Set up sparse matrix An using spdiags and compute its upper triangular
