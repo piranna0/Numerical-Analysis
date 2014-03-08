@@ -1,0 +1,21 @@
+function xRoots = FindZeros(alpha)
+% alpha is a positive real number.
+% xRoots is a column that houses all the roots (in left-to-right order) of the function
+%
+% f(x) sin(alpha*x) - x
+%
+% that occur in the interval [-1,1].
+
+%Roots should be symmetric
+xRoots = [0];
+
+posX = pi / (2 * alpha); %sin(posx) = 1
+negX = 3 * pi / (2 * alpha); %sin(negX) = -1
+
+while sign(posX) ~= sign(negX)
+    posRoot = fzero(@(x) p(x,alpha),[posX, negX]);
+    xRoots = [-posRoot; xRoots; posRoot];
+end
+
+function z = p(x,a)
+z = sin(a * x) - x

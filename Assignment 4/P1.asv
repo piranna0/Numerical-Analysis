@@ -1,6 +1,6 @@
 function P1()
 % Plots the function f(x) = sin(alpha*x) - x for various alpha
-for alpha = 1:30
+alpha =
     x = linspace(-1,1,200);
     y = MyF(x,alpha);
 %     figure()
@@ -9,7 +9,6 @@ for alpha = 1:30
     grid on
     shg
     pause(1)
-end
 
 function y = MyF(x,alpha)
 y = sin(alpha*x) - x;
