@@ -1,49 +1,36 @@
-  function ShowTransits()
-% Simulates the motion of the 4 inner planets and transits as viewed
-% from Mars.
-% Set up a black display area...
-close all
-M = 280;
-fill([-M M M -M],[-M -M M  M],'k')
-axis equal off
-hold on
-% Display the Sun...
-r = .6955; theta = linspace(0,2*pi); fill(r*cos(theta),r*sin(theta),'y')
-% Display the orbits of the 4 inner planets...
-tau = linspace(0,700,601);
-Mercury = Location(tau,1);
-Venus = Location(tau,2);
-Earth = Location(tau,3);
-Mars = Location(tau,4);
-plot(Mercury.x,Mercury.y,'w')
-plot(Venus.x,Venus.y,'w')
-plot(Earth.x,Earth.y,'w')
-plot(Mars.x,Mars.y,'w')
-% Display planet location for the next T days...
-T = 2000;
-for t=1:T
-    % Compute the locations...
-    Mercury = Location(t,1);
-    Venus = Location(t,2);
-    Earth = Location(t,3);
-    Mars = Location(t,4);
-    % The two tangent points as viewed from Mars...
-    [L,R] = TP(Earth,r);
-    % The Left and Right tangent lines...
-    hL = plot([Earth.x L.x],[Earth.y L.y],'c');
-    hR = plot([Earth.x R.x],[Earth.y R.y],'m');
-    % The four planets...
-    t
-    h1 = plot(Mercury.x,Mercury.y,'.w','Markersize',20);
-    h2 = plot(Venus.x,Venus.y,'.w','Markersize',20);
-    h3 = plot(Earth.x,Earth.y,'.w','Markersize',20);
-    h4 = plot(Mars.x,Mars.y,'.r','Markersize',20);
-    pause(.03)
-    shg
-    delete(hL,hR,h1,h2,h3,h4)
+function TestTime(i,j,t)
+locI = Location(t, i)
+locJ = Location(t, j)
+
+[L, R] = TP(locJ, .6955)
+
+vecJSL = [locJ.x - L.x, locJ.y - L.y]
+vecJI = [locJ.x - locI.x, locJ.y - locI.y]
+
+vecJSL / norm(vecJSL)
+vecJI / norm(vecJI)
+
+
+
+function z = transit(i, j, t, l)
+locI = Location(t, i);
+locJ = Location(t, j);
+
+vecJI = [locJ.x - locI.x, locJ.y - locI.y];
+[L, R] = TP(locJ, .6955);
+if l
+    vecJS = [locJ.x - L.x, locJ.y - L.y];
+else
+    vecJS = [locJ.x - R.x, locJ.y - R.y];
 end
 
-  function [L,R] = TP(E,r)
+z = sinXY(vecJI, vecJS);
+
+function theta = sinXY(x, y)
+theta = (x(1)*y(2)-x(2)*y(1))/(norm(x)*norm(y));
+
+
+function [L,R] = TP(E,r)
 % Let C be the circle x^2+y^2 = r^2.
 % E is a point outside of C
 % L is a point on C with the property that the line through E and L is
@@ -61,7 +48,7 @@ f = sqrt(d^2-r^2)/sqrt(alfa^2+beta^2);
 R = MakePoint(f*alfa+E.x,f*beta+E.y);
 
       
-   function E = Location(t,k)
+ function E = Location(t,k)
  % E is a length-n structure array with the property that
  % planet k is located at (E.x(i),E.y(i)) at time t(i), i=1:n.
  % (Time is in earth days.) 
@@ -84,4 +71,3 @@ R = MakePoint(f*alfa+E.x,f*beta+E.y);
 function P = MakePoint(x,y)
 % P is a 2-field structure with x assigned to P.x and y assigned to P.y.
 P = struct('x',x,'y',y);
-
