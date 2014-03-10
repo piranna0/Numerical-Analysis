@@ -41,5 +41,7 @@ xRoots = xRoots(1:i, 1);
 %Zeros are symmetric so duplicate zeros on both sides.
 xRoots = [-flipud(xRoots(2: length(xRoots), 1)); xRoots];
 
+
+% Function used by fzero
 function z = p(x,a)
 z = sin(a * x) - x;

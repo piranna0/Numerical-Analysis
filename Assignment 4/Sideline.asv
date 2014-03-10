@@ -7,20 +7,20 @@ function [xStar,yStar,ThetaStar] = Sideline(a,b,d,w)
 
 % There can be two local maxima. One on either side (by x coord) of the
 % goal post (minimum). Use fminbnd on each side to find the global maximum.
-tMin = acos(-d / a)
+tMin = acos(-d / a);
 t1 = fminbnd(@(t) -angle(a,b,d,w,t), 0, tMin);
 t2 = fminbnd(@(t) -angle(a,b,d,w,t), tMin, pi);
 
-% Choose t1 or t2
-if angle(a, b, d, w, t1) > angle(a, b, d, w, t2)
-    tMax = t1
-else
-    tMax = t2;
+% Choose t1 or t2. Store maximum in t1
+t1Angle = angle(a, b, d, w, t1);
+t2Angle = angle(a, b, d, w, t2);
+if t1Angle < t2Angle
+    t1 = t2;
 end
 
-xStar = xCoord(tMax, a);
-yStar = yCoord(tMax, b);
-ThetaStar = angle(a, b, d, w, tMax) * 180 / pi;
+xStar = xCoord(t1, a);
+yStar = yCoord(t1, b);
+ThetaStar = t1Angle * 180 / pi;
 
 function z = angle(a, b, d, w, t)
 x = xCoord(t, a);
@@ -38,9 +38,10 @@ magP32 = norm(P32);
 
 z = acos(dotProd / (magP31 * magP32));
 
+% Calculates the x coordinate along the elipse
+function x = xCoord(t, a)
+x = a * cos(t);
 
-function z = xCoord(t, a)
-z = a * cos(t);
-
-function z = yCoord(t, b)
-z = b * sin(t);
+% Calculates the y coordinate a
+function y = yCoord(t, b)
+y = b * sin(t);

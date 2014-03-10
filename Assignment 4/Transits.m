@@ -6,16 +6,15 @@ function [StartTime,Duration] = Transits(i,j,T)
 phi = [ 77.45645; 131.53298; 102.94719; 336.04084];
 Y   = [  87.968; 224.695; 365.242; 686.930]; %Days per 360 degrees
 
-% Degrees per day
 phi = phi([i j]);
-Z   = 360 ./ Y([i j]); 
+Z   = 360 ./ Y([i j]);  % Degrees per day
 
 % Z = Degrees per day
 % Phi = degrees at start
 % I will assume circular orbits for my bounding interval
 % So every day the planets will get approximately Z(i) - Z(j) degrees
-% closer in orbit. Assume I am off by 1/4 of these days (in either
-% direction) to get my bounding interval.
+% closer in orbit. Since the orbits are not circular, I assume I am off by
+% at most 1/4 of these days in either direction,  to get my bounding interval.
 
 degreesToGo = phi(2) - phi(1);
 if degreesToGo < 0
@@ -23,17 +22,18 @@ if degreesToGo < 0
 end
 
 k = 1;
-sameT = 0;
+sameT = 0; %Time that orbits are in same line
 
+% Find transits until sameT > T
 while true
-    timeToGo = degreesToGo / (Z(1) - Z(2))
+    timeToGo = degreesToGo / (Z(1) - Z(2));
     sameT = fzero(@(t) transit(i, j, t, true),[sameT + timeToGo* 3./4., sameT + timeToGo* 5./4.]);
     if sameT > T
         break;
     end
-    StartTime(k) = sameT;
+    StartTime(k,1) = sameT;
     EndTime = fzero(@(t) transit(i, j, t, false),[sameT - 1, sameT + 1]);
-    Duration(k) = (EndTime - StartTime(k)) * 24.;
+    Duration(k,1) = (EndTime - sameT) * 24.;
     
     degreesToGo = 360;
     k = k+1;
@@ -41,7 +41,10 @@ end
 
 
 
-
+% Function used by fzero
+% i, j are the planet indices
+% t is the time in number of days
+% l is a boolean: true = left transit, false = right transit
 function z = transit(i, j, t, l)
 locI = Location(t, i);
 locJ = Location(t, j);
@@ -56,8 +59,9 @@ end
 
 z = sinXY(vecJI, vecJS);
 
-function theta = sinXY(x, y)
-theta = (x(1)*y(2)-x(2)*y(1))/(norm(x)*norm(y));
+% Calculate sin(theta)
+function sinTheta = sinXY(x, y)
+sinTheta = (x(1)*y(2)-x(2)*y(1))/(norm(x)*norm(y));
 
 
 function [L,R] = TP(E,r)
