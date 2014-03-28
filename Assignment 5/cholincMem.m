@@ -13,6 +13,7 @@ for j=1:n
     G(j,j) = v(j)/sqrt(v(j));
     % Compute the maximum number of allowable nonzeros in G(j+1:n,j)...
     q = nnz(A(j+1:n,n)) + p;
+    
     % Set G(i,j) = v(i)/G(j,j) if |v(i)| is one of the q largest entries in |v(j+1:n)|
     % and set it to zero otherwise(other values of G are already 0)
     if(n-j < q)
@@ -22,7 +23,7 @@ for j=1:n
         %sorted value, only indices
         [B, I] = sort(abs(v(j+1:n)), 'descend');
         for k = 1:q
-            i = j + I(k);
+            i = j + I(k); %Must add j since we sort from j+1:n
             if(v(i) ~= 0) 
                 G(i, j) = v(i) / G(j,j);
             end

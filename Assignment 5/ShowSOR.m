@@ -1,7 +1,7 @@
 function ShowSOR()
 % Checks out the SOR method on a couple of problems.
 Region = {'S','L','C','D','A','H', 'B'} ;
-GridSize = 20;
+GridSize = 30;
 close all
     for k=1:7
         figure
@@ -22,22 +22,23 @@ spy(G)
 title('The Region','fontsize',16)
 A = delsq(G);
 %Added code after here
+
 L = tril(A, -1);   %from assignment pdf
 D = diag(diag(A)); %from assignment pdf
 for i = 1:length(omega)
     M_w = (1. / omega(i)) * D + L;        %lower triangular
     N_w = ((1. / omega(i)) - 1) * D - L';  %upper triangular
     
-    %inv(M) * N = x
-    %Mx = N
-    %x = M \ N
+    %inv(M) * N = Z
+    %MZ = N
+    %Z = M \ N
     Z = M_w \ N_w;
-    max(abs(eig(full(Z)))) 
     rho(i) = max(abs(eig(full(Z))));
 end
+%End of added code
 
 subplot(1,2,2)
 plot(rho)
-title('The Matrix','fontsize',16)
+title('Spectral radii','fontsize',16)
 set(gcf,'position',[100 100 1400 600])
 end

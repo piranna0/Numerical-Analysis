@@ -13,8 +13,8 @@ m = 30;
 n = 45;
 p = 50;
 noise = 0.01;
-%A = SurveyerTopo(m,n,p,noise,E(0,0));
-A = TrueTopo(m,n);
+A = SurveyorTopo(m,n,p,noise,E(0,0));
+% A = TrueTopo(m,n);
 MaxDiff = max(max(abs(A-TrueTopo(m,n))));
 figure
 contour(linspace(0,3,n+1),linspace(0,2,m+1),A,linspace(min(min(A)),max(max(A)),20))
